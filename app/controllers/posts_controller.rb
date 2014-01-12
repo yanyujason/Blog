@@ -5,15 +5,12 @@ class PostsController < ApplicationController
     if @post.save
       redirect_to posts_index_path
     else
-      render template: "posts/new"
+      redirect_to new_posts_path
     end
-    #redirect_to action: :show, id: @post.id
-
-    #render text: params[:post].inspect
   end
 
   def show
-    @post = Post.find(params[:id])
+    @post = Post.find_by(params[:id])
   end
 
   def index
@@ -22,6 +19,27 @@ class PostsController < ApplicationController
 
   def new
 
+  end
+
+  def edit
+    @post = Post.find_by(params[:id])
+  end
+
+  def update
+    @post = Post.find_by(params[:id])
+
+    if @post.update(params[:post].permit(:title, :text))
+      redirect_to posts_index_path
+    else
+      render 'edit'
+    end
+  end
+
+  def destroy
+    @post = Post.find_by(params[:id])
+    @post.destroy
+
+    redirect_to posts_path
   end
 
 
